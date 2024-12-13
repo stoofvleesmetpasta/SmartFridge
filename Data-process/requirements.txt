@@ -1,2 +1,5 @@
 psycopg2-binary
 pandas
+sklearn
+sqlalchemy
+joblib
