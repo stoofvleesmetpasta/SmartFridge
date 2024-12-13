@@ -28,23 +28,23 @@ with open('smart refrigerator data.csv', mode='r', encoding='utf-8-sig') as file
     reader = csv.DictReader(file, delimiter=';')
 
     for row in reader:
-        # Verwijder BOM-teken en spaties van de kolomnamen
-        row = {key.strip().replace('\ufeff', ''): value for key, value in row.items()}
+        # Strip leading/trailing spaces from the keys
+        row = {key.strip(): value for key, value in row.items()}
 
         try:
-            # Verwerk de 'date', 'temperature', 'threshold', en andere velden
-            date = datetime.strptime(row['date'], '%d/%m/%Y').strftime('%Y-%m-%d')  # Zorg voor het juiste datumnotatie
-            temperature = row['Tempreature'].replace('°C', '').strip()  # Verwijder '°C'
-            threshold = float(row['Threashold'].replace('kg', '').strip())  # Verwijder 'kg' en converteer naar float
-            bottle_number = int(row['Bottle  number'])  # Converteer bottle_number naar integer
-            heating_element = int(row['Heating element'])  # Converteer heating_element naar integer
+            # Verwerk de 'timestamp', 'temperature', 'Bottle number', en 'Heating element'
+            # Zorg voor het juiste datumnotatie
+            timestamp = datetime.strptime(row['timestamp'], '%H:%M:%S').time()
+            temperature = int(row['temperature'].strip())  # Verwijder spaties en converteer naar integer
+            bottle_number = int(row['Bottle  number'])  # Note the extra space here
+            heating_element = int(row['Heating element'])
 
             cursor.execute(""" 
-                INSERT INTO smart_fridge_data (date, temperature, threshold, bottle_number, heating_element) 
-                VALUES (%s, %s, %s, %s, %s)
-            """, (date, temperature, threshold, bottle_number, heating_element))
+                INSERT INTO smart_fridge_data (timestamp, temperature, bottle_number, heating_element) 
+                VALUES (%s, %s, %s, %s)
+            """, (timestamp, temperature, bottle_number, heating_element))
 
-            print(f"Ingevoegde rij: {date}, {temperature}, {threshold}, {bottle_number}, {heating_element}")
+            print(f"Ingevoegde rij: {timestamp}, {temperature}, {bottle_number}, {heating_element}")
         except Exception as e:
             print(f"Fout bij het invoeren van rij: {row}. Fout: {e}")
             continue  # Sla de probleemrij over
