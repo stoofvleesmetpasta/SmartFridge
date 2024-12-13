@@ -4,7 +4,7 @@ import datetime
 import time
 
 # Bestandsnaam
-CSV_FILE = 'smart refrigerator data.csv'
+CSV_FILE = './Data-process/smart refrigerator data.csv'
 
 
 def read_last_row(filename):
