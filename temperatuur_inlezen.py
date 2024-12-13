@@ -3,6 +3,7 @@ import random
 import datetime
 import time
 
+
 # Bestandsnaam
 CSV_FILE = './Data-process/smart refrigerator data.csv'
 
@@ -44,16 +45,11 @@ def append_new_row(filename, timestamp, new_temp):
     """Voeg een nieuwe rij toe aan het CSV-bestand."""
     new_row = {
         'timestamp': timestamp.strftime("%H:%M:%S"),
-        'Tempreature': f"{new_temp}°C",
-        # Simuleer realistische waarden
-        'Bottle  number': random.randint(0, 6),
-        # Simuleer realistische waarden
-        'Heating element': random.randint(1, 3)
+        'temperature': f"{new_temp}",
     }
 
     with open(filename, mode='a', newline='', encoding='utf-8-sig') as file:
-        fieldnames = ['timestamp', 'Tempreature',
-                      'Bottle  number', 'Heating element']
+        fieldnames = ['timestamp', 'temperature',]
         writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=';')
 
         # Voeg header toe als bestand leeg is
@@ -70,7 +66,7 @@ def main():
     if last_row:
         # Combineer tijd met huidige datum en haal de temperatuur
         last_timestamp = combine_time_with_date(last_row['timestamp'])
-        last_temp = last_row['Tempreature'].replace('°C', '').strip()
+        last_temp = last_row['temperature']
     else:
         # Start met de huidige tijd als er geen data is
         last_timestamp = datetime.datetime.now()
