@@ -3,7 +3,7 @@ import csv
 import time
 from datetime import datetime
 
-# Database connection
+# Databaseverbinding
 conn = psycopg2.connect(
     dbname="smart_fridge",
     user="admin",
@@ -21,6 +21,10 @@ while True:
     except psycopg2.Error as e:
         print("Tabel nog niet klaar, probeer opnieuw...")
         time.sleep(5)  # Wacht 5 seconden en probeer opnieuw
+
+# Verwijder bestaande gegevens uit de tabel
+cursor.execute("DELETE FROM smart_fridge_data;")
+print("Bestaande gegevens verwijderd.")
 
 # Lees en voeg gegevens in van de CSV
 with open('smart refrigerator data.csv', mode='r', encoding='utf-8-sig') as file:
