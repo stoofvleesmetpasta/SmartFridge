@@ -41,19 +41,5 @@ services:
       - pgadmin-data:/var/lib/pgadmin
     restart: always
 
-  app:
-    build: .
-    command: python main.py
-    depends_on:
-      - db
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: admin
-      DB_PASSWORD: admin123
-      DB_NAME: smart_fridge
-    volumes:
-      - .:/app  # Mount the current directory to access main.py inside the container
-
 volumes:
   pgadmin-data:
