@@ -1,7 +1,7 @@
 import os
 import joblib
-import pandas as pd
 from models import model_flesjes_aanmaken, model
+from simulatie import simulatie_koelkast
 
 # Bestands- en mappaden
 model_dir = './models'
@@ -28,7 +28,11 @@ def check_or_train_models():
             rf_model = joblib.load(rf_model_path)
             print(f"Model Flesjes: {bottle_model}")
             print(f"Model Fridge: {rf_model}")
-            return bottle_model, rf_model
+
+            print("-----SIMULATION START-----")
+            simulatie = simulatie_koelkast.FridgeSimulation()
+            simulatie.simulate_cooling()
+            
         else:
             print("De modellen zullen opnieuw worden getraind...")
             # Train de modellen opnieuw
