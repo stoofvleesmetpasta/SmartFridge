@@ -1,6 +1,7 @@
 import time
 import random
 import joblib
+import json
 
 class FridgeSimulation:
     def __init__(self):
@@ -16,6 +17,8 @@ class FridgeSimulation:
             exit()
 
     def simulate_cooling(self):
+        history = []  # Initialize history
+
         while True:
             try:
                 # Genereer een temperatuur tussen 0 en 5 graden
@@ -26,6 +29,22 @@ class FridgeSimulation:
 
                 # Gebruik de temperatuur en het aantal flesjes om het koelvermogen te voorspellen
                 cooling_power = self.cooling_model.predict([[0, temperature, bottle_number]])[0]  # '0' als timestamp placeholder
+
+                # Create a new entry
+                new_entry = {
+                    "temperature": int(temperature),
+                    "bottle_number": int(bottle_number),
+                    "cooling_power": float(cooling_power)
+                }
+
+                # Update history, keeping the last 5 entries
+                history.append(new_entry)
+                if len(history) > 10:
+                    history.pop(0)
+
+                # Save data to JSON file
+                with open("simulation_data.json", "w") as file:
+                    json.dump(history, file)
 
                 # Toon de resultaten
                 print(f"Temperatuur: {temperature:.2f} °C | Flesjes: {int(bottle_number)} | Koelvermogen: {cooling_power}")
